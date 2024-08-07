@@ -20,19 +20,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'pnpm'
 
-      - name: Setup node & pnpm
-        uses: volta-cli/action@v4
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
-      - name: Build
-        run: |
-          pnpm build
+      - name: Build TypeScript
+        run: pnpm build
 
-      - name: Test
-        run: |
-          pnpm test:ci
+      - name: Run tests
+        run: pnpm test
         env:
           DOCKER_HOST: tcp://localhost:2375
