@@ -41,4 +41,4 @@ jobs:
       - name: Run tests
         run: pnpm test
         env:
-          DOCKER_HOST: tcp://localhost:2375
+          DOCKER_HOST: unix:///var/run/docker.sock
