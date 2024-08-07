@@ -3,31 +3,42 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Start Docker service
+        run: |
+          sudo service docker start
+
+      - name: Ensure Docker permissions
+        run: |
+          sudo chmod 666 /var/run/docker.sock
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Build TypeScript
-        run: npm run build
+        run: pnpm build
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
         env:
-          DOCKER_HOST: tcp://localhost:2375
+          DOCKER_HOST: unix:///var/run/docker.sock
