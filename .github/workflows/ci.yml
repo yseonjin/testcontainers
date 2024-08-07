@@ -19,15 +19,32 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
+
+      - name: Setup node & pnpm
+        uses: volta-cli/action@v4
+
+      - name: Get pnpm cache directory path
+        id: pnpm-cache-dir-path
+        run: echo "::set-output name=dir::$(pnpm config get store-dir)"
+
+      - name: Cache pnpm
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Build TypeScript
-        run: pnpm build
+      - name: Build
+        run: |
+          pnpm build
 
-      - name: Run tests
-        run: pnpm test
+      - name: Test
+        run: |
+          pnpm test:ci
         env:
           DOCKER_HOST: tcp://localhost:2375
