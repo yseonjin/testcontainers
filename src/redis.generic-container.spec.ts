@@ -2,6 +2,7 @@ import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import Redis from 'ioredis';
 
 jest.setTimeout(1000000);
+
 describe('redis generic-container test', () => {
   let container: StartedTestContainer;
   let redisClient: Redis;
