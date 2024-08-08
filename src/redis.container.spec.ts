@@ -22,9 +22,9 @@ describe('Redis Test with Testcontainers', () => {
     await container.stop();
   });
 
-  beforeEach(async () => {
-    await redisClient.flushall(); // 모든 키 삭제
-  });
+  // beforeEach(async () => {
+  //   await redisClient.flushall(); // 모든 키 삭제
+  // });
 
   test('Redis에 값을 설정하고 가져오기', async () => {
     // Redis에 값 설정
